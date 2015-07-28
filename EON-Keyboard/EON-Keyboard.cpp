@@ -151,6 +151,11 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 									Press_Enter(TimeWait);
 									break;
 								}
+								if (CString(szArglist[iLoop + 1]).Find(_T("WIN")) == 1) { //Note 1 is position, not true 
+									//printf("\nWIN Special key wanted\n");
+									Press_Win(TimeWait);
+									break;
+								}
 
 								printf("\n Special ley not handled. Sorry.\n");
 							} 
@@ -210,6 +215,7 @@ int Usage(){
 	printf(" -s \"{XXX}\": Type special key or char. Can be:\n");
 	printf("\t\t- \"{TAB}\": For TAB key\n");
 	printf("\t\t- \"{ENTER}\": For ENTER key\n");
+	printf("\t\t- \"{WIN}\": For WIN key\n");
 	printf("Please note: EON Keyboard is low level drived.\n So your keyboard must be set as French (AZERTY) to see what you expect.\n");
 	exit(1);
 }
