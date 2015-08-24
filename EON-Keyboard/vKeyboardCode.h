@@ -41,12 +41,12 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-13
 
 /* Move key */
 #define vKey_PageUp 0x21;
-#define vkey_PageDown 0x22;
-#define vkey_End 0x23;
-#define vkey_Up 0x26;
-#define vkey_Right 0x27;
-#define vkey_Down 0x28;
-#define vkey_Left 0x25;
+#define vKey_PageDown 0x22;
+#define vKey_End 0x23;
+#define vKey_Up 0x26;
+#define vKey_Right 0x27;
+#define vKey_Down 0x28;
+#define vKey_Left 0x25;
 
 /* Operator key */
 #define vKey_Multiply 0x6A;

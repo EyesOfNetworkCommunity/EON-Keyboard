@@ -73,6 +73,10 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 
 				if (CString(szArglist[iLoop]).GetLength() < 3) {
 					if (CString(szArglist[iLoop]).Find(_T("-")) == 0) {
+
+						// Initial Wait to allow this "strange" OS named Windows to deal whit his own event.... /Nocomment .....
+						Sleep(300);
+
 						//printf("Detected at:%d\n", CString(szArglist[iLoop]).Find(_T("-")));
 						if ( CString(szArglist[iLoop]).GetAt(1) == 'h') {
 							// Do -h then exit
@@ -110,6 +114,20 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 							//printf("\nX:%d, Y:%d\n", iXMouseCursorPosition, iYMouseCursorPosition);
 							exit(0);
 						}
+						if (CString(szArglist[iLoop]).GetAt(1) == 'g') {
+
+							GetWindowRect(hDesktop, &desktop);
+							iHorizontalResolution = desktop.right;
+							iVerticalResolution = desktop.bottom;
+
+							POINT p;
+							if (GetCursorPos(&p))
+							{
+								printf("%d,%d,%d,%d\n",iHorizontalResolution,iVerticalResolution,p.x,p.y);
+							}
+							exit(0);
+						}
+
 						if (CString(szArglist[iLoop]).GetAt(1) == 'c') {
 							//printf("\n -c engaged \n");
 							// Do -c then exit
@@ -139,30 +157,13 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 
 						if (CString(szArglist[iLoop]).GetAt(1) == 's') {
 							//printf("\n -s engaged \n");
-							if (CString(szArglist[iLoop + 1]).GetAt(0) == '{') {
-								//printf("\nSpecial Char wanted\n");
-								if (CString(szArglist[iLoop + 1]).Find(_T("TAB")) == 1) { //Note 1 is position, not true 
-									//printf("\nTAB Special key wanted\n");
-									Press_Tab(TimeWait);
-									break;
-								}
-								if (CString(szArglist[iLoop + 1]).Find(_T("ENTER")) == 1) { //Note 1 is position, not true 
-									//printf("\nENTER Special key wanted\n");
-									Press_Enter(TimeWait);
-									break;
-								}
-								if (CString(szArglist[iLoop + 1]).Find(_T("WIN")) == 1) { //Note 1 is position, not true 
-									//printf("\nWIN Special key wanted\n");
-									Press_Win(TimeWait);
-									break;
-								}
+							KeyString(CString(szArglist[iLoop + 1]));
+							exit(0);
+						}
 
-								printf("\n Special ley not handled. Sorry.\n");
-							} 
-							else
-							{
-								KeyString(CString(szArglist[iLoop + 1]));
-							}
+						if (CString(szArglist[iLoop]).GetAt(1) == 'S') {
+							//printf("\n -S engaged \n");
+							SpecialKeyString(CString(szArglist[iLoop + 1]));
 							exit(0);
 						}
 						printf("\n \tUnknow option.\n");
@@ -203,6 +204,8 @@ int Usage(){
 	printf("\n\nUsage:\n");
 	printf(" -h: This help\n");
 	printf(" -v: Version\n");
+	printf(" -g: Get info about screensize and mouse x,y position.\n");
+	printf("\n");
 	printf(" -w X: Where X is the number of sec to wait before action (debug purpose only, not needed in production)\n");
 	printf(" -m xN yN: Move mouse cursor to xN yN\n");
 	printf("\n");
@@ -210,9 +213,10 @@ int Usage(){
 	printf(" -c L: Double click on Left Button\n");
 	printf(" -c m: Click on Middle Button\n");
 	printf(" -c r: Click on Right Button\n");
+	printf(" -g: Get info about screensize and mouse x,y position.\n");
 	printf("\n");
 	printf(" -s \"Your String\": Str delimited by \"word to type.\"\n");
-	printf(" -s \"{XXX}\": Type special key or char. Can be:\n");
+	printf(" -S \"{XXX}\": Type special key or char. Can be:\n");
 	printf("\t\t- \"{TAB}\": For TAB key\n");
 	printf("\t\t- \"{ENTER}\": For ENTER key\n");
 	printf("\t\t- \"{WIN}\": For WIN key\n");
@@ -303,6 +307,32 @@ int KeyString(CString strToPress)
 
 	return(0);
 }
+
+int SpecialKeyString(CString strToPress)
+{
+	int iLoop = 0;
+	int iStringIndex = 0;
+	int strLenght = strToPress.GetLength();
+	int TimeWait = 60;
+
+	for (iLoop = 0; iLoop < strLenght; iLoop++) {
+		//printf("Loop: %d\n", iLoop);
+		if (strToPress.Find(_T("{TAB}"), iStringIndex ) >= iStringIndex) { //Note 1 is position, not true 
+			//printf("\nTAB Special key wanted (iStringIndex:%d)\n", iStringIndex);
+			iStringIndex = iStringIndex + 5; // Add 5 char offset
+			Press_Tab(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{ENTER}"), iStringIndex) >= iStringIndex) { //Note 1 is position, not true 
+			//printf("\nENTER Special key wanted (iStringIndex:%d)\n", iStringIndex);
+			iStringIndex = iStringIndex + 7; 
+			Press_Enter(TimeWait);
+		}
+	}
+
+	return(0);
+}
+
 int MoveMouse(int x, int y) {
 	int response;
 	response= SetCursorPos(x,y);
@@ -2500,5 +2530,140 @@ int Press_BackSlash(int milliSeconds) {
 	ip.ki.wVk = vKey_Alt; // virtual-key code for the LShift key
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	return 0;
+}
+
+int Press_Down(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_Down;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Down;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_Up(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_Up;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Up;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_Right(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_Right;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Right;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_Left(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_Left;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Left;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+
+
+int Press_PageDown(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_PageDown;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_PageDown;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_PageUp(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_PageUp;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_PageUp;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
 	return 0;
 }

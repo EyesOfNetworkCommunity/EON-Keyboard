@@ -26,6 +26,7 @@ int Subversion = 0;
 
 int Usage();
 int KeyString(CString strToPress);
+int SpecialKeyString(CString strToPress);
 int MoveMouse(int x, int y);
 int ClickMouse(int WantedButton, int NumberOfClick);
 
@@ -108,6 +109,15 @@ int Press_GreaterThan(int milliSeconds);
 int Press_Enter(int milliSeconds);
 int Press_Tab(int milliSeconds);
 int Press_Win(int milliSeconds);
+
+/* Direction keys */
+int Press_Down(int milliSeconds);
+int Press_Up(int milliSeconds);
+int Press_Right(int milliSeconds);
+int Press_Left(int milliSeconds);
+
+int Press_PageDown(int milliSeconds);
+int Press_PageUp(int milliSeconds);
 
 /* Special Char */
 int Press_Pound(int milliSeconds);
