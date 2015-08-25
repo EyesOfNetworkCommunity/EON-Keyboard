@@ -242,6 +242,13 @@ int KeyString(CString strToPress)
 		if (strToPress.GetAt(iLoop) == '7') { Press_7(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == '8') { Press_8(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == '9') { Press_9(TimeWait); continue; }
+
+		if (strToPress.GetAt(iLoop) == '+') { Press_Add(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '-') { Press_Substract(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '*') { Press_Multiple(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '/') { Press_Divide(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '=') { Press_Equal(TimeWait); continue; }
+
 		if (strToPress.GetAt(iLoop) == 'a') { Press_a(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == 'b') { Press_b(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == 'c') { Press_c(TimeWait); continue; }
@@ -297,9 +304,11 @@ int KeyString(CString strToPress)
 		if (strToPress.GetAt(iLoop) == ',') { Press_Comma(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == ';') { Press_SemiComma(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == '?') { Press_DotWhat(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '!') { Press_DotExclamation(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == '.') { Press_Dot(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == '<') { Press_SmallerThan(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == '>') { Press_GreaterThan(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '\\') { Press_BackSlash(TimeWait); continue; }
 		if (strToPress.GetAt(iLoop) == '\\') { Press_BackSlash(TimeWait); continue; }
 
 		printf("Char not handled, sorry: %c\n", (LPCTSTR)strToPress.GetAt(iLoop));
@@ -317,16 +326,111 @@ int SpecialKeyString(CString strToPress)
 
 	for (iLoop = 0; iLoop < strLenght; iLoop++) {
 		//printf("Loop: %d\n", iLoop);
-		if (strToPress.Find(_T("{TAB}"), iStringIndex ) >= iStringIndex) { //Note 1 is position, not true 
+		if (strToPress.Find(_T("{TAB}"), iStringIndex ) >= iStringIndex) { 
 			//printf("\nTAB Special key wanted (iStringIndex:%d)\n", iStringIndex);
 			iStringIndex = iStringIndex + 5; // Add 5 char offset
 			Press_Tab(TimeWait);
 		}
 
-		if (strToPress.Find(_T("{ENTER}"), iStringIndex) >= iStringIndex) { //Note 1 is position, not true 
+		if (strToPress.Find(_T("{ENTER}"), iStringIndex) >= iStringIndex) { 
 			//printf("\nENTER Special key wanted (iStringIndex:%d)\n", iStringIndex);
 			iStringIndex = iStringIndex + 7; 
 			Press_Enter(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{DOWN}"), iStringIndex) >= iStringIndex) {  
+			iStringIndex = iStringIndex + 6;
+			Press_Down(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{UP}"), iStringIndex) >= iStringIndex) {  
+			iStringIndex = iStringIndex + 4;
+			Press_Up(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{RIGHT}"), iStringIndex) >= iStringIndex) { 
+			iStringIndex = iStringIndex + 7;
+			Press_Right(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{LEFT}"), iStringIndex) >= iStringIndex) { 
+			iStringIndex = iStringIndex + 6;
+			Press_Left(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{PAGEUP}"), iStringIndex) >= iStringIndex) { 
+			iStringIndex = iStringIndex + 8;
+			Press_PageUp(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{PAGEDOWN}"), iStringIndex) >= iStringIndex) {  
+			iStringIndex = iStringIndex + 10;
+			Press_PageDown(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{ECHAP}"), iStringIndex) >= iStringIndex) {  
+			iStringIndex = iStringIndex + 8;
+			Press_Echap(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F1}"), iStringIndex) >= iStringIndex) { 
+			iStringIndex = iStringIndex + 8;
+			Press_F1(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F2}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F2(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F3}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F3(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F4}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F4(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F5}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F5(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F6}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F6(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F7}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F7(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F8}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F8(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F9}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F9(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F10}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F10(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F11}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F11(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F12}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F12(TimeWait);
 		}
 	}
 
@@ -2254,6 +2358,27 @@ int Press_Multiple(int milliSeconds){
 
 	return 0;
 }
+int Press_Equal(int milliSeconds){
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_Equal;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Equal;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
 
 int Press_Tab(int milliSeconds){
 	INPUT ip;
@@ -2313,6 +2438,27 @@ int Press_Enter(int milliSeconds) {
 	Sleep(milliSeconds);
 
 	ip.ki.wVk = vKey_Enter;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_Echap(int milliSeconds) {
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_Echap;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Echap;
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 
@@ -2440,6 +2586,27 @@ int Press_DotWhat(int milliSeconds) {
 	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	return 0;
+}
+int Press_DotExclamation(int milliSeconds){
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_Exclamation;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Exclamation;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
 	return 0;
 }
 
@@ -2622,7 +2789,6 @@ int Press_Left(int milliSeconds) {
 	return 0;
 }
 
-
 int Press_PageDown(int milliSeconds) {
 
 	INPUT ip;
@@ -2662,6 +2828,271 @@ int Press_PageUp(int milliSeconds) {
 	Sleep(milliSeconds);
 
 	ip.ki.wVk = vKey_PageUp;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+
+int Press_F1(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F1;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F1;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F2(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F2;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F2;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F3(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F3;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F3;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F4(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F4;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F4;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F5(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F5;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F5;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F6(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F6;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F6;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F7(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F7;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F7;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F8(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F8;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F8;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F9(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F9;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F9;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F10(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F10;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F10;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F11(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F11;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F11;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_F12(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = vKey_F12;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F12;
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 

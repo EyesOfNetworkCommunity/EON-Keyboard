@@ -16,43 +16,12 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-13
 
 #pragma once
 
-/* Mo
-
-
-/* Special key of Keyboard*/
-#define vKey_Shift 0x10;
-#define vKey_Control 0x11;
-#define vKey_Win 0x5B;
-#define vKey_BackSpace 0x08;
-#define vKey_Del 0x2E;
-#define vKey_Tab 0x09;
-#define vKey_Enter 0x0D;
-#define vKey_Echap 0x1B;
-#define vKey_Space 0x20;
-#define vKey_PrintScreen 0x2C;
-#define vKey_Comma 0xbc;
-#define vKey_SemiComma 0xbe;
-#define vKey_SmallerThan 0xe2;
-
-
-/* Combinasable key */
-#define vKey_Alt 0x12;
-#define vKey_Ctrl 0x11;
-
-/* Move key */
-#define vKey_PageUp 0x21;
-#define vKey_PageDown 0x22;
-#define vKey_End 0x23;
-#define vKey_Up 0x26;
-#define vKey_Right 0x27;
-#define vKey_Down 0x28;
-#define vKey_Left 0x25;
-
 /* Operator key */
 #define vKey_Multiply 0x6A;
 #define vKey_Add 0x6B;
 #define vKey_Divide 0x6F;
 #define vKey_Substract 0x6D;
+#define vKey_Equal 0xBB;
 
 /* Number Key */
 #define vKey_0 0x30;
@@ -93,3 +62,47 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-13
 #define vKey_x 0x58;
 #define vKey_y 0x59;
 #define vKey_z 0x5A;
+
+/* Special key of Keyboard*/
+#define vKey_Shift 0x10;
+#define vKey_Control 0x11;
+#define vKey_Comma 0xbc;
+#define vKey_SemiComma 0xbe;
+#define vKey_SmallerThan 0xe2;
+#define vKey_Exclamation 0xdf;
+
+#define vKey_Win 0x5B;
+#define vKey_BackSpace 0x08;
+#define vKey_Del 0x2E;
+#define vKey_Tab 0x09;
+#define vKey_Enter 0x0D;
+#define vKey_Echap 0x1B;
+#define vKey_Space 0x20;
+#define vKey_PrintScreen 0x2C;
+
+/* Combinasable key */
+#define vKey_Alt 0x12;
+#define vKey_Ctrl 0x11;
+
+/* Move key */
+#define vKey_PageUp 0x21;
+#define vKey_PageDown 0x22;
+#define vKey_End 0x23;
+#define vKey_Up 0x26;
+#define vKey_Right 0x27;
+#define vKey_Down 0x28;
+#define vKey_Left 0x25;
+
+/* Function keys*/
+#define vKey_F1 0x70;
+#define vKey_F2 0x71;
+#define vKey_F3 0x72;
+#define vKey_F4 0x73;
+#define vKey_F5 0x74;
+#define vKey_F6 0x75;
+#define vKey_F7 0x76;
+#define vKey_F8 0x77;
+#define vKey_F9 0x78;
+#define vKey_F10 0x79;
+#define vKey_F11 0x7A;
+#define vKey_F12 0x7B;
