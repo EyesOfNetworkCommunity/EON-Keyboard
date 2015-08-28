@@ -439,8 +439,23 @@ int SpecialKeyString(CString strToPress)
 
 int MoveMouse(int x, int y) {
 	int response;
-	response= SetCursorPos(x,y);
-	return 0;
+	// NOT WORKING.... Should consider adapatation of:
+	/*
+	    INPUT Input={0};
+    Input.type = INPUT_MOUSE;
+
+    Input.mi.dx = (LONG)nx;
+    Input.mi.dy = (LONG)ny;
+
+    // set move cursor directly and left click
+    Input.mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP;
+
+    SendInput(1,&Input,sizeof(INPUT));
+	*/
+	response = SetCursorPos(x, y);
+	
+	
+	return response;
 }
 int ClickMouse( int WantedButton,int NumberOfClick) {
 	
