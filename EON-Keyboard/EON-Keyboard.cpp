@@ -332,6 +332,12 @@ int SpecialKeyString(CString strToPress)
 			Press_Tab(TimeWait);
 		}
 
+		if (strToPress.Find(_T("{WIN}"), iStringIndex) >= iStringIndex) {
+			//printf("\WIN Special key wanted (iStringIndex:%d)\n", iStringIndex);
+			iStringIndex = iStringIndex + 5; // Add 5 char offset
+			Press_Win(TimeWait);
+		}
+
 		if (strToPress.Find(_T("{ENTER}"), iStringIndex) >= iStringIndex) { 
 			//printf("\nENTER Special key wanted (iStringIndex:%d)\n", iStringIndex);
 			iStringIndex = iStringIndex + 7; 
