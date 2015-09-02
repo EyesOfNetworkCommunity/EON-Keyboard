@@ -349,6 +349,16 @@ int SpecialKeyString(CString strToPress)
 			Press_Down(TimeWait);
 		}
 
+		if (strToPress.Find(_T("{ALTF4}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 7;
+			Press_AltF4(TimeWait);
+		}
+
+		if (strToPress.Find(_T("{ALTTAB}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_AltTab(TimeWait);
+		}
+
 		if (strToPress.Find(_T("{UP}"), iStringIndex) >= iStringIndex) {  
 			iStringIndex = iStringIndex + 4;
 			Press_Up(TimeWait);
@@ -3117,5 +3127,66 @@ int Press_F12(int milliSeconds) {
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 
+	return 0;
+}
+
+int Press_AltF4(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press Shift key
+	ip.ki.wVk = vKey_Alt; 
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	ip.ki.wVk = vKey_F4; 
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_F4; 
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	ip.ki.wVk = vKey_Alt; 
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	return 0;
+}
+int Press_AltTab(int milliSeconds) {
+
+	INPUT ip;
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0; // hardware scan code for key
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press Alt key
+	ip.ki.wVk = vKey_Alt;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	ip.ki.wVk = vKey_Tab;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = vKey_Tab;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	ip.ki.wVk = vKey_Alt;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
 	return 0;
 }

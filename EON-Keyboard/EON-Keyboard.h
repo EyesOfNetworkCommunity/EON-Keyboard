@@ -124,6 +124,9 @@ int Press_F10(int milliSeconds);
 int Press_F11(int milliSeconds);
 int Press_F12(int milliSeconds);
 
+int Press_AltF4(int milliSeconds);
+int Press_AltTab(int milliSeconds);
+
 /* Direction keys */
 int Press_Down(int milliSeconds);
 int Press_Up(int milliSeconds);
