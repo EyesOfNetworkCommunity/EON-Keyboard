@@ -32,6 +32,7 @@ using namespace std;
 
 int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 {
+	int TimeWait = 60;
 	int nRetCode = 0;
 	LPWSTR *szArglist;
 	int nArgs;
@@ -41,7 +42,6 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 	int iHorizontalResolution = 0;
 	int iVerticalResolution = 0;
 
-	int TimeWait = 60;
 	int SleepSec = 0;
 
 	RECT desktop;
@@ -59,11 +59,12 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		else
 		{
 			szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
-			//printf("\n\n nArgs:%d\n", nArgs);
+			//debug purpose.
+			//for (int i = 0; i<nArgs; i++) printf("%d: %ws\n", i, szArglist[i]);
 
 			if ((NULL == szArglist ) || (nArgs == 1))
 			{
-				Usage();
+				 Usage();
 			}
 			else for (iLoop = 1; iLoop < nArgs; iLoop++) {
 				/*printf("\nInto the loop.\n");
@@ -92,7 +93,13 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 							//printf("\n -w engaged \n");
 							SleepSec = _wtoi(CString(szArglist[iLoop + 1]));
 							Sleep(SleepSec * 1000);
-							continue;
+							iLoop += 2;
+						}
+
+
+						if (CString(szArglist[iLoop]).GetAt(1) == 'T') {
+							TimeWait = _wtoi(CString(szArglist[iLoop + 1]));
+							iLoop+=2;
 						}
 
 						if (CString(szArglist[iLoop]).GetAt(1) == 'm') {
@@ -157,22 +164,22 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 
 						if (CString(szArglist[iLoop]).GetAt(1) == 's') {
 							//printf("\n -s engaged \n");
-							KeyString(CString(szArglist[iLoop + 1]));
+							KeyString(TimeWait, CString(szArglist[iLoop + 1]));
 							exit(0);
 						}
 
 						if (CString(szArglist[iLoop]).GetAt(1) == 'S') {
 							//printf("\n -S engaged \n");
-							SpecialKeyString(CString(szArglist[iLoop + 1]));
+							SpecialKeyString(TimeWait, CString(szArglist[iLoop + 1]));
 							exit(0);
 						}
-						printf("\n \tUnknow option.\n");
+						printf("\nUnknow option.\n");
 						Usage();
 					}
 				}
 				else
 				{
-					printf("\n Unknow option.\n");
+					printf("\nUnknow option (seems too long).\n");
 					Usage();
 				}
 
@@ -207,6 +214,7 @@ int Usage(){
 	printf(" -g: Get info about screensize and mouse x,y position.\n");
 	printf("\n");
 	printf(" -w X: Where X is the number of sec to wait before action (debug purpose only, not needed in production)\n");
+	printf(" -T X: Where X is the number of Millisec to wait when pressing and release keys\n");
 	printf(" -m xN yN: Move mouse cursor to xN yN\n");
 	printf("\n");
 	printf(" -c l: Click on Left button\n");
@@ -220,96 +228,110 @@ int Usage(){
 	printf("\t\t- \"{TAB}\": For TAB key\n");
 	printf("\t\t- \"{ENTER}\": For ENTER key\n");
 	printf("\t\t- \"{WIN}\": For WIN key\n");
+	printf("Exemple: EON-Keyboard_32.exe -w 4 -T 5 -s \"ceci est un test du clavier virtuel.\" \n");
 	printf("Please note: EON Keyboard is low level drived.\n So your keyboard must be set as French (AZERTY) to see what you expect.\n");
 	exit(1);
 }
 
-int KeyString(CString strToPress)
+int KeyString(int TimeWait, CString strToPress)
 {
 	int iLoop = 0;
 	int strLenght = strToPress.GetLength();
-	int TimeWait = 60;
 
 	for (iLoop = 0; iLoop < strLenght; iLoop++) {
-		if (strToPress.GetAt(iLoop) == ' ') { Press_Space(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '0') { Press_0(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '1') { Press_1(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '2') { Press_2(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '3') { Press_3(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '4') { Press_4(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '5') { Press_5(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '6') { Press_6(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '7') { Press_7(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '8') { Press_8(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '9') { Press_9(TimeWait); continue; }
 
-		if (strToPress.GetAt(iLoop) == '+') { Press_Add(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '-') { Press_Substract(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '*') { Press_Multiple(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '/') { Press_Divide(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '=') { Press_Equal(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'a') { Press_Letter('a',TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'b') { Press_Letter('b',TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'c') { Press_Letter('c', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'd') { Press_Letter('d', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'e') { Press_Letter('e', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'f') { Press_Letter('f', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'g') { Press_Letter('g', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'h') { Press_Letter('h', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'i') { Press_Letter('i', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'j') { Press_Letter('j', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'k') { Press_Letter('k', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'l') { Press_Letter('l', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'm') { Press_Letter('m', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'n') { Press_Letter('n', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'o') { Press_Letter('o', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'p') { Press_Letter('p', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'q') { Press_Letter('q', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'r') { Press_Letter('r', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 's') { Press_Letter('s', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 't') { Press_Letter('t', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'u') { Press_Letter('u', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'v') { Press_Letter('v', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'w') { Press_Letter('w', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'x') { Press_Letter('x', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'y') { Press_Letter('y', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'z') { Press_Letter('z', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == ' ') { Press_Letter(' ', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == ',') { Press_Letter(',',TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == ';') { Press_Letter(';', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == ':') { Press_Letter(':', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '!') { Press_Letter('!', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '*') { Press_Letter('*', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '&') { Press_Letter('&', TimeWait); continue; }
+		
+		if (strToPress.GetAt(iLoop) == '\'') { Press_Letter('\'', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '(') { Press_Letter('(', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '-') { Press_Letter('-', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '_') { Press_Letter('_', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == ')') { Press_Letter(')', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '=') { Press_Letter('=', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '<') { Press_Letter('<', TimeWait); continue; }
 
-		if (strToPress.GetAt(iLoop) == 'a') { Press_a(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'b') { Press_b(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'c') { Press_c(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'd') { Press_d(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'e') { Press_e(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'f') { Press_f(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'g') { Press_g(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'h') { Press_h(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'i') { Press_i(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'j') { Press_j(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'k') { Press_k(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'l') { Press_l(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'm') { Press_m(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'n') { Press_n(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'o') { Press_o(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'p') { Press_p(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'q') { Press_q(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'r') { Press_r(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 's') { Press_s(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 't') { Press_t(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'u') { Press_u(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'v') { Press_v(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'w') { Press_w(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'x') { Press_x(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'y') { Press_y(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'z') { Press_z(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'A') { Press_A(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'B') { Press_B(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'C') { Press_C(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'D') { Press_D(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'E') { Press_E(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'F') { Press_F(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'G') { Press_G(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'H') { Press_H(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'I') { Press_I(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'J') { Press_J(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'K') { Press_K(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'L') { Press_L(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'M') { Press_M(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'N') { Press_N(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'O') { Press_O(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'P') { Press_P(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'Q') { Press_Q(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'R') { Press_R(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'S') { Press_S(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'T') { Press_T(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'U') { Press_U(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'V') { Press_V(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'W') { Press_W(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'X') { Press_X(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'Y') { Press_Y(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == 'Z') { Press_Z(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == ',') { Press_Comma(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == ';') { Press_SemiComma(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '?') { Press_DotWhat(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '!') { Press_DotExclamation(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '.') { Press_Dot(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '<') { Press_SmallerThan(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '>') { Press_GreaterThan(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '\\') { Press_BackSlash(TimeWait); continue; }
-		if (strToPress.GetAt(iLoop) == '\\') { Press_BackSlash(TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '$') { Press_Letter('$',TimeWait); continue; }
+
+		if (strToPress.GetAt(iLoop) == 'A') { Press_UpperLetter('A', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'B') { Press_UpperLetter('B', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'C') { Press_UpperLetter('C', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'D') { Press_UpperLetter('D', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'E') { Press_UpperLetter('E', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'F') { Press_UpperLetter('F', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'G') { Press_UpperLetter('G', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'H') { Press_UpperLetter('H', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'I') { Press_UpperLetter('I', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'J') { Press_UpperLetter('J', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'K') { Press_UpperLetter('K', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'L') { Press_UpperLetter('L', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'M') { Press_UpperLetter('M', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'N') { Press_UpperLetter('N', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'O') { Press_UpperLetter('O', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'P') { Press_UpperLetter('P', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'Q') { Press_UpperLetter('Q', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'R') { Press_UpperLetter('R', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'S') { Press_UpperLetter('S', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'T') { Press_UpperLetter('T', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'U') { Press_UpperLetter('U', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'V') { Press_UpperLetter('V', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'W') { Press_UpperLetter('W', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'X') { Press_UpperLetter('X', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'Y') { Press_UpperLetter('Y', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == 'Z') { Press_UpperLetter('Z', TimeWait); continue; }
+
+		if (strToPress.GetAt(iLoop) == '0') { Press_UpperLetter('0', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '1') { Press_UpperLetter('1', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '2') { Press_UpperLetter('2', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '3') { Press_UpperLetter('3', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '4') { Press_UpperLetter('4', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '5') { Press_UpperLetter('5', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '6') { Press_UpperLetter('6', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '7') { Press_UpperLetter('7', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '8') { Press_UpperLetter('8', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '9') { Press_UpperLetter('9', TimeWait); continue; }
+
+		if (strToPress.GetAt(iLoop) == '>') { Press_UpperLetter('>', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '?') { Press_UpperLetter('?', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '.') { Press_UpperLetter('.', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '/') { Press_UpperLetter('/', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '%') { Press_UpperLetter('%', TimeWait); continue; }
+		if (strToPress.GetAt(iLoop) == '+') { Press_UpperLetter('+', TimeWait); continue; }
+
+
+		
+		// TODO if (strToPress.GetAt(iLoop) == '\\') { Press_BackSlash(TimeWait); continue; }
 
 		printf("Char not handled, sorry: %c\n", (LPCTSTR)strToPress.GetAt(iLoop));
 	}
@@ -317,14 +339,26 @@ int KeyString(CString strToPress)
 	return(0);
 }
 
-int SpecialKeyString(CString strToPress)
+int SpecialKeyString(int TimeWait, CString strToPress)
 {
 	int iLoop = 0;
 	int iStringIndex = 0;
 	int strLenght = strToPress.GetLength();
-	int TimeWait = 60;
 
 	for (iLoop = 0; iLoop < strLenght; iLoop++) {
+
+		if (strToPress.Find(_T("{DOUBLEQUOTE}"), iStringIndex) >= iStringIndex) {
+			//printf("\nTAB Special key wanted (iStringIndex:%d)\n", iStringIndex);
+			iStringIndex = iStringIndex + 13; // Add 5 char offset
+			Press_Letter('"', TimeWait);
+		}
+
+		if (strToPress.Find(_T("{F3}"), iStringIndex) >= iStringIndex) {
+			iStringIndex = iStringIndex + 8;
+			Press_F3(TimeWait);
+		}
+
+		/* 
 		//printf("Loop: %d\n", iLoop);
 		if (strToPress.Find(_T("{TAB}"), iStringIndex ) >= iStringIndex) { 
 			//printf("\nTAB Special key wanted (iStringIndex:%d)\n", iStringIndex);
@@ -399,10 +433,6 @@ int SpecialKeyString(CString strToPress)
 			Press_F2(TimeWait);
 		}
 
-		if (strToPress.Find(_T("{F3}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
-			Press_F3(TimeWait);
-		}
 
 		if (strToPress.Find(_T("{F4}"), iStringIndex) >= iStringIndex) {
 			iStringIndex = iStringIndex + 8;
@@ -448,6 +478,7 @@ int SpecialKeyString(CString strToPress)
 			iStringIndex = iStringIndex + 8;
 			Press_F12(TimeWait);
 		}
+		*/
 	}
 
 	return(0);
@@ -536,1640 +567,81 @@ int ClickMouse( int WantedButton,int NumberOfClick) {
 	return 0;// Feel more human :)
 }
 
-int Press_0(int milliSeconds) {
+int Press_Letter(WCHAR AskedLetter, int milliSeconds) {
 
 	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	ip.type = INPUT_KEYBOARD;
+
+	ip.ki.wScan = MapVirtualKeyEx(VkKeyScanEx(AskedLetter, HKLCurrentLayout) & 0xFF, MAPVK_VK_TO_VSC, HKLCurrentLayout);
+
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	ip.ki.wVk = VkKeyScanEx(AskedLetter, HKLCurrentLayout);
+	ip.ki.dwFlags = 0; 
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds);
+
+	ip.ki.wVk = VkKeyScanEx(AskedLetter, HKLCurrentLayout); 
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	return 0;
+}
+int Press_UpperLetter(WCHAR AskedLetter, int milliSeconds) {
+
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+	
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
 	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
+	ip.ki.wScan = MapVirtualKeyEx(VK_SHIFT & 0xFF, MAPVK_VK_TO_VSC, 0); 
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
+	
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_0; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
+	ip.ki.wScan = MapVirtualKeyEx(VkKeyScanEx(AskedLetter, HKLCurrentLayout) & 0xFF, MAPVK_VK_TO_VSC, HKLCurrentLayout);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
-
 	Sleep(milliSeconds);
 
-	ip.ki.wVk = vKey_0; // virtual-key code for the "a" key
+	ip.ki.wVk = VkKeyScanEx(AskedLetter, HKLCurrentLayout); 
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds);
 
 	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_1(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
+	ip.ki.wScan = MapVirtualKeyEx(VK_SHIFT & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_1; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_1; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
+	Sleep(milliSeconds * 2);
 	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_2(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_2; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_2; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_3(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_3; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_3; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_4(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_4; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_4; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_5(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_5; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_5; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_6(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_6; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_6; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_7(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_7; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_7; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_8(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_8; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_8; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_9(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_9; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_9; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-
-
-
-int Press_a(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; 
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_a;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_a; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_b(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_b;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_b; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_c(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_c;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_c; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_d(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_d;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_d; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_e(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_e;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_e; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_f(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_f;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_f; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_g(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_g;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_g; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_h(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_h;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_h; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_i(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_i;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_i; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_j(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_j;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_j; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_k(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_k;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_k; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_l(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_l;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_l; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_m(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_m;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_m; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_n(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_n;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_n; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_o(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_o;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_o; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_p(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_p;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_p; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_q(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_q;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_q; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_r(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_r;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_r; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_s(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_s;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_s; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_t(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_t;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_t; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_u(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_u;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_u; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_v(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_v;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_v; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_w(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_w;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_w; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_x(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_x;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_x; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_y(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_y;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_y; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_z(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_z;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_z; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds *2);
 
 	return 0;
 }
 
 
-int Press_A(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	// Press the "A" key
-	ip.ki.wVk = vKey_a; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	// Release the "A" key
-	ip.ki.wVk = vKey_a; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_B(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_b;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_b;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_C(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_c; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_c; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_D(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_d;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_d;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_E(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_e; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_e; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_F(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_f;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_f;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_G(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_g; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_g; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_H(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_h;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_h;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_I(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_i; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_i; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_J(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_j;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_j;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_K(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_k; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_k; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_L(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_l;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_l;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_M(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_m; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_m; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_N(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_n;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_n;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_O(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_o; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_o; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_P(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_p;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_p;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_Q(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_q; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_q; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_R(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_r;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_r;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_S(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_s; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_s; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_T(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_t;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_t;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_U(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_u;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_u;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_V(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_v; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_v; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_W(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_w;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_w;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_X(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_x; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_x; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_Y(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_y;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_y;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_Z(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_z; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_z; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-
+//// HAVE TO BE DONE
 int Press_Pound(int milliSeconds) {
 
 	INPUT ip;
@@ -2205,28 +677,6 @@ int Press_Pound(int milliSeconds) {
 	ip.ki.wVk = vKey_Alt; // virtual-key code for the LShift key
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_And(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_1;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_1;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
 	return 0;
 }
 int Press_Arobase(int milliSeconds) {
@@ -2303,8 +753,7 @@ int Press_Euro(int milliSeconds){
 	SendInput(1, &ip, sizeof(INPUT));
 	return 0;
 }
-
-int Press_Add(int milliSeconds){
+int Press_BackSlash(int milliSeconds) {
 
 	INPUT ip;
 
@@ -2314,100 +763,31 @@ int Press_Add(int milliSeconds){
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_Add;
+	ip.ki.wVk = vKey_Alt; // virtual-key code for the "a" key
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	ip.ki.wVk = vKey_Ctrl; // virtual-key code for the "a" key
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
+
+	ip.ki.wVk = vKey_8;
 	ip.ki.dwFlags = 0; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
 	Sleep(milliSeconds);
 
-	ip.ki.wVk = vKey_Add;
+	ip.ki.wVk = vKey_8;
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 
-	return 0;
-}
-int Press_Substract(int milliSeconds) {
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Substract;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Substract;
+	ip.ki.wVk = vKey_Ctrl; // virtual-key code for the LShift key
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 
-	return 0;
-}
-int Press_Divide(int milliSeconds) {
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Divide;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Divide;
+	ip.ki.wVk = vKey_Alt; // virtual-key code for the LShift key
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_Multiple(int milliSeconds){
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Multiply;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Multiply;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_Equal(int milliSeconds){
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Equal;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Equal;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
 	return 0;
 }
 
@@ -2493,241 +873,6 @@ int Press_Echap(int milliSeconds) {
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 
-	return 0;
-}
-int Press_Space(int milliSeconds) {
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Space;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Space;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_Comma(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Comma;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Comma; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_SemiComma(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_SemiComma;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_SemiComma; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-
-int Press_Dot(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_SemiComma; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_SemiComma; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_DotWhat(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Comma; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Comma; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-int Press_DotExclamation(int milliSeconds){
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Exclamation;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_Exclamation;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-
-int Press_SmallerThan(int milliSeconds) {
-
-	INPUT ip;
-
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_SmallerThan;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_SmallerThan; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	return 0;
-}
-int Press_GreaterThan(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	// Press Shift key
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_SmallerThan; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_SmallerThan; // virtual-key code for the "a" key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Shift; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-	return 0;
-}
-
-int Press_BackSlash(int milliSeconds) {
-
-	INPUT ip;
-
-	// Set up a generic keyboard event.
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = vKey_Alt; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Ctrl; // virtual-key code for the "a" key
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_8;
-	ip.ki.dwFlags = 0; // 0 for key press
-	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(milliSeconds);
-
-	ip.ki.wVk = vKey_8;
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Ctrl; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
-
-	ip.ki.wVk = vKey_Alt; // virtual-key code for the LShift key
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
-	SendInput(1, &ip, sizeof(INPUT));
 	return 0;
 }
 
@@ -2871,19 +1016,22 @@ int Press_F1(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F1;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F1 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F1;
+	ip.ki.wVk = VK_F1; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -2893,41 +1041,47 @@ int Press_F2(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F2;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F2 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F2;
+	ip.ki.wVk = VK_F2; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
 int Press_F3(int milliSeconds) {
 
 	INPUT ip;
-
+	
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F3;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F3 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F3;
+	ip.ki.wVk = VK_F3; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -2937,19 +1091,22 @@ int Press_F4(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F4;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F4 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F4;
+	ip.ki.wVk = VK_F4; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -2959,19 +1116,22 @@ int Press_F5(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F5;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F5 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F5;
+	ip.ki.wVk = VK_F5; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -2981,19 +1141,22 @@ int Press_F6(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F6;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F6 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F6;
+	ip.ki.wVk = VK_F6; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -3003,19 +1166,22 @@ int Press_F7(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F7;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F7 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F7;
+	ip.ki.wVk = VK_F7; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -3025,19 +1191,22 @@ int Press_F8(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F8;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F8 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F8;
+	ip.ki.wVk = VK_F8; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -3047,19 +1216,22 @@ int Press_F9(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F9;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F9 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F9;
+	ip.ki.wVk = VK_F9; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -3069,19 +1241,22 @@ int Press_F10(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F10;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F10 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F10;
+	ip.ki.wVk = VK_F10; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -3091,19 +1266,22 @@ int Press_F11(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F11;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F11 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F11;
+	ip.ki.wVk = VK_F11; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
@@ -3113,19 +1291,22 @@ int Press_F12(int milliSeconds) {
 
 	// Set up a generic keyboard event.
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0; // hardware scan code for key
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = vKey_F12;
-	ip.ki.dwFlags = 0; // 0 for key press
+	// Press Shift key
+	ip.ki.wScan = MapVirtualKeyEx(VK_F12 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 2);
 
-	ip.ki.wVk = vKey_F12;
+	ip.ki.wVk = VK_F12; // virtual-key code for the LShift key
+	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
+	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
+	Sleep(milliSeconds * 2);
 
 	return 0;
 }
