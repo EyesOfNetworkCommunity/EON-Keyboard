@@ -27,12 +27,15 @@ int Subversion = 0;
 int Usage();
 int KeyString(int TimeWait, CString strToPress);
 int SpecialKeyString(int TimeWait, CString strToPress);
+
 int MoveMouse(int x, int y);
 int ClickMouse(int WantedButton, int NumberOfClick);
+
 
 /* Letter functions */
 int Press_Letter(WCHAR letter, int milliSeconds);
 int Press_UpperLetter(WCHAR letter, int milliSeconds);
+int Press_ALTGRLetter(WCHAR AskedLetter, int milliSeconds);
 
 /* Special Key */
 int Press_Echap(int milliSeconds);
@@ -53,7 +56,6 @@ int Press_F11(int milliSeconds);
 int Press_F12(int milliSeconds);
 
 int Press_AltF4(int milliSeconds);
-int Press_AltTab(int milliSeconds);
 
 /* Direction keys */
 int Press_Down(int milliSeconds);
