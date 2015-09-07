@@ -150,7 +150,6 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="vKeyboardCode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EON-Keyboard.cpp" />

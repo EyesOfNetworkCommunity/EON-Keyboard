@@ -17,7 +17,6 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-13
 #pragma once
 
 #include "resource.h"
-#include "vKeyboardCode.h"
 #include <string> 
 using namespace std;
 
@@ -67,8 +66,3 @@ int Press_PageDown(int milliSeconds);
 int Press_PageUp(int milliSeconds);
 
 /* Special Char */
-int Press_Pound(int milliSeconds);
-int Press_And(int milliSeconds);
-int Press_Arobase(int milliSeconds);
-int Press_Euro(int milliSeconds);
-
