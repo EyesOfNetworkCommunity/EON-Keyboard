@@ -36,6 +36,8 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 	LPWSTR *szArglist;
 	int nArgs;
 	int iLoop;
+	
+	int iMouseData = 0;
 	int iXMouseCursorPosition = 0;
 	int iYMouseCursorPosition = 0;
 	int iHorizontalResolution = 0;
@@ -157,7 +159,17 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 								ClickMouse(2, 1); // Droit
 								exit(0);
 							}
-							printf("\n Unknow option of click.\n");
+							if (CString(szArglist[iLoop + 1]).GetAt(0) == 'w') {
+								iMouseData = _wtoi(CString(szArglist[iLoop + 2]));
+								WheelMouse(0, iMouseData, TimeWait);
+								exit(0);
+							}
+							if (CString(szArglist[iLoop + 1]).GetAt(0) == 'W') {
+								iMouseData = _wtoi(CString(szArglist[iLoop + 2]));
+								WheelMouse(1, iMouseData, TimeWait);
+								exit(0);
+							}
+							printf("\n Unknow option of click.%ws\n", CString(szArglist[iLoop + 1]).GetAt(0));
 							Usage();
 						}
 
@@ -346,139 +358,212 @@ int KeyString(int TimeWait, CString strToPress)
 int SpecialKeyString(int TimeWait, CString strToPress)
 {
 	int iLoop = 0;
+	int iDebug = 0;
+
 	int iStringIndex = 0;
 	int strLenght = strToPress.GetLength();
+	//printf("String: %ws\n", strToPress.GetString());
 
-	for (iLoop = 0; iLoop < strLenght; iLoop++) {
+	while ( iLoop < strLenght) {
+	
+		if (iDebug) printf("String(%d): %ws... iLoop(%d)\n", strLenght, strToPress.GetString(), iLoop);
 
-		if (strToPress.Find(_T("{DOUBLEQUOTE}"), iStringIndex) >= iStringIndex) {
-			//printf("\nTAB Special key wanted (iStringIndex:%d)\n", iStringIndex);
-			iStringIndex = iStringIndex + 13; // Add 5 char offset
+		if ( strToPress.Find(_T("{DOUBLEQUOTE}"), iStringIndex) == 0) {
+			if (iDebug) printf("In string %ws i found on index(%d) the ", strToPress.GetString(), (strToPress.Find(_T("{DOUBLEQUOTE}"), iStringIndex)));
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{DOUBLEQUOTE}") - 1));
+			iLoop += (sizeof("{DOUBLEQUOTE}") - 1);
 			Press_Letter('"', TimeWait);
+			if (iDebug) printf("{DOUBLEQUOTE}.\n");
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F1}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F1}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F1}") - 1));
+			iLoop += (sizeof("{F1}") - 1);
+			if (iDebug) printf("F1\n");
 			Press_F1(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F2}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F2}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F2}") - 1));
+			iLoop += (sizeof("{F2}") - 1);
+			if (iDebug) printf("F2\n");
 			Press_F2(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F3}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F3}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F3}") - 1));
+			iLoop += (sizeof("{F3}") - 1);
+			if (iDebug) printf("F3\n");
 			Press_F3(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F4}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F4}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F4}") - 1));
+			iLoop += (sizeof("{F4}") - 1);
+			if (iDebug) printf("F4\n");
 			Press_F4(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F5}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F5}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F5}") - 1));
+			iLoop += (sizeof("{F5}") - 1);
+			if (iDebug) printf("F5\n");
 			Press_F5(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F6}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F6}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F6}") - 1));
+			iLoop += (sizeof("{F6}") - 1);
+			if (iDebug) printf("F6\n");
 			Press_F6(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F7}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F7}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F7}") - 1));
+			iLoop += (sizeof("{F7}") - 1);
+			if (iDebug) printf("F7\n");
 			Press_F7(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F8}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F8}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F8}") - 1));
+			iLoop += (sizeof("{F8}") - 1);
+			if (iDebug) printf("F8\n");
 			Press_F8(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F9}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F9}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F9}") - 1));
+			iLoop += (sizeof("{F9}") - 1);
+			if (iDebug) printf("F9\n");
 			Press_F9(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F10}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F10}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F10}") - 1));
+			iLoop += (sizeof("{F10}") - 1);
+			if (iDebug) printf("F10\n");
 			Press_F10(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F11}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F11}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F11}") - 1));
+			iLoop += (sizeof("{F11}") - 1);
+			if (iDebug) printf("F11\n");
 			Press_F11(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{F12}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{F12}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{F12}") - 1));
+			iLoop += (sizeof("{F12}") - 1);
+			if (iDebug) printf("F12\n");
 			Press_F12(TimeWait);
+			continue;
 		}
 
-
-
-
-
-		if (strToPress.Find(_T("{ALTF4}"), iStringIndex) >= iStringIndex) {
-			iStringIndex = iStringIndex + 7;
+		if (strToPress.Find(_T("{ALTF4}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{ALTF4}") - 1));
+			iLoop += (sizeof("{ALTF4}") - 1);
+			if (iDebug) printf("ALTF4\n");
 			Press_AltF4(TimeWait);
+			continue;
 		}
 		 
-		if (strToPress.Find(_T("{TAB}"), iStringIndex ) >= iStringIndex) { 
-			//printf("\nTAB Special key wanted (iStringIndex:%d)\n", iStringIndex);
-			iStringIndex = iStringIndex + 5; // Add 5 char offset
+		if (strToPress.Find(_T("{TAB}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{TAB}") - 1));
+			iLoop += (sizeof("{TAB}") - 1); 
+			if (iDebug) printf("TAB\n");
 			Press_Tab(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{WIN}"), iStringIndex) >= iStringIndex) {
-			//printf("\WIN Special key wanted (iStringIndex:%d)\n", iStringIndex);
-			iStringIndex = iStringIndex + 5; // Add 5 char offset
+		if (strToPress.Find(_T("{WIN}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{WIN}") - 1));
+			iLoop += (sizeof("{WIN}") - 1);
+			if (iDebug) printf("WIN\n");
 			Press_Win(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{ENTER}"), iStringIndex) >= iStringIndex) { 
-			//printf("\nENTER Special key wanted (iStringIndex:%d)\n", iStringIndex);
-			iStringIndex = iStringIndex + 7; 
+		if (strToPress.Find(_T("{ENTER}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{ENTER}") - 1));
+			iLoop += (sizeof("{ENTER}") - 1);
+			if (iDebug) printf("ENTER\n");
 			Press_Enter(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{DOWN}"), iStringIndex) >= iStringIndex) {  
-			iStringIndex = iStringIndex + 6;
+		if (strToPress.Find(_T("{DOWN}"), iStringIndex) == 0) {
+			if (iDebug) printf("In string %ws i found on index(%d) the ", strToPress.GetString(), (strToPress.Find(_T("{DOWN}"), iStringIndex)));
+			strToPress = strToPress.Right(strToPress.GetLength() - ( sizeof("{DOWN}") - 1));
+			iLoop += (sizeof("{DOWN}") -1);
+			if (iDebug) printf("DOWN\n");
 			Press_Down(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{UP}"), iStringIndex) >= iStringIndex) {  
-			iStringIndex = iStringIndex + 4;
+		if (strToPress.Find(_T("{UP}"), iStringIndex) == 0) {
+			if (iDebug) printf("In string %ws i found on index(%d) the ", strToPress.GetString(), (strToPress.Find(_T("{UP}"), iStringIndex)));
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{UP}") - 1));
+			iLoop += (sizeof("{UP}") - 1);
+			if (iDebug) printf("UP\n");
 			Press_Up(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{RIGHT}"), iStringIndex) >= iStringIndex) { 
-			iStringIndex = iStringIndex + 7;
+		if (strToPress.Find(_T("{RIGHT}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{RIGHT}") - 1));
+			iLoop += (sizeof("{RIGHT}") - 1);
+			if (iDebug) printf("RIGHT\n");
 			Press_Right(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{LEFT}"), iStringIndex) >= iStringIndex) { 
-			iStringIndex = iStringIndex + 6;
+		if (strToPress.Find(_T("{LEFT}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{LEFT}") - 1));
+			iLoop += (sizeof("{LEFT}") - 1);
+			if (iDebug) printf("LEFT\n");
 			Press_Left(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{PAGEUP}"), iStringIndex) >= iStringIndex) { 
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{PAGEUP}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{PAGEUP}") - 1));
+			iLoop += (sizeof("{PAGEUP}") - 1);
+			if (iDebug) printf("PAGEUP\n");
 			Press_PageUp(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{PAGEDOWN}"), iStringIndex) >= iStringIndex) {  
-			iStringIndex = iStringIndex + 10;
+		if (strToPress.Find(_T("{PAGEDOWN}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{PAGEDOWN}") - 1));
+			iLoop += (sizeof("{PAGEDOWN}") - 1);
+			if (iDebug) printf("PAGEDOWN\n");
 			Press_PageDown(TimeWait);
+			continue;
 		}
 
-		if (strToPress.Find(_T("{ECHAP}"), iStringIndex) >= iStringIndex) {  
-			iStringIndex = iStringIndex + 8;
+		if (strToPress.Find(_T("{ECHAP}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{ECHAP}") - 1));
+			iLoop += (sizeof("{ECHAP}") - 1);
+			if (iDebug) printf("ECHAP\n");
 			Press_Echap(TimeWait);
+			continue;
 		}
-		
+		//printf ("Loop\n");
+		if (iDebug) printf("\t\tiLoop(%d on %d)\n", iLoop, strLenght);
 	}
 
 	return(0);
@@ -564,6 +649,39 @@ int ClickMouse( int WantedButton,int NumberOfClick) {
 		}
 	}
 	Sleep(250); 
+	return 0;// Feel more human :)
+}
+int WheelMouse(bool bDirection, int NumberWheel, int TimeWait) {
+
+	POINT CurrentCursorPosition;
+	HWND Handle;
+
+	GetCursorPos(&CurrentCursorPosition);
+	Handle = WindowFromPoint(CurrentCursorPosition); /* Avoid esoteric comportement of Mouse Event....*/
+	SetFocus(Handle); /* Avoid esoteric comportement of Mouse Event....*/
+
+	INPUT ip;
+
+	ip.type = INPUT_MOUSE;
+	ip.mi.time = 0;
+	ip.mi.dx = CurrentCursorPosition.x;
+	ip.mi.dy = CurrentCursorPosition.y;
+	ip.mi.dwExtraInfo = 0;
+	
+
+	if (bDirection == 0){
+		// Wheel goes down :P
+		ip.mi.dwFlags = MOUSEEVENTF_XDOWN;
+	}
+	if (bDirection == 1){
+		// Wheel goes up
+		ip.mi.dwFlags = MOUSEEVENTF_XUP;
+	}
+	
+	ip.mi.mouseData = NumberWheel;
+	SendInput(1, &ip, sizeof(ip));
+				
+	Sleep(TimeWait * 3);
 	return 0;// Feel more human :)
 }
 
@@ -1165,19 +1283,19 @@ int Press_Down(int milliSeconds) {
 	ip.ki.dwExtraInfo = 0;
 
 	// Press Shift key
-	ip.ki.wScan = 0;
+	ip.ki.wScan = 0x50; // See: Hardware Key Code (NOT VK CODE!!!!)
 	ip.ki.wVk = VK_DOWN;
-	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY; // 0 for key press
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | 0; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 3);
 
 	ip.ki.wVk = VK_DOWN;
-	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	ip.ki.wScan = 0x50; // See: Hardware Key Code (NOT VK CODE!!!!)
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
-	Sleep(milliSeconds);
+
+	Sleep(milliSeconds * 3);
 
 	return 0;
 }
@@ -1192,19 +1310,19 @@ int Press_Up(int milliSeconds) {
 	ip.ki.dwExtraInfo = 0;
 
 	// Press Shift key
-	ip.ki.wScan = 0;
+	ip.ki.wScan = 0x48; // See: Hardware Key Code (NOT VK CODE!!!!)
 	ip.ki.wVk = VK_UP;
-	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY; // 0 for key press
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | 0; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 3);
 
 	ip.ki.wVk = VK_UP;
-	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	ip.ki.wScan = 0x48; // See: Hardware Key Code (NOT VK CODE!!!!)
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
-	Sleep(milliSeconds);
+
+	Sleep(milliSeconds * 3);
 
 	return 0;
 
@@ -1220,19 +1338,19 @@ int Press_Right(int milliSeconds) {
 	ip.ki.dwExtraInfo = 0;
 
 	// Press Shift key
-	ip.ki.wScan = 0;
+	ip.ki.wScan = 0x4D; // See: Hardware Key Code (NOT VK CODE!!!!)
 	ip.ki.wVk = VK_RIGHT;
-	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY; // 0 for key press
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | 0; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 3);
 
 	ip.ki.wVk = VK_RIGHT;
-	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	ip.ki.wScan = 0x4D; // See: Hardware Key Code (NOT VK CODE!!!!)
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
-	Sleep(milliSeconds);
+
+	Sleep(milliSeconds * 3);
 
 	return 0;
 }
@@ -1247,19 +1365,19 @@ int Press_Left(int milliSeconds) {
 	ip.ki.dwExtraInfo = 0;
 
 	// Press Shift key
-	ip.ki.wScan = 0;
+	ip.ki.wScan = 0x4B; // See: Hardware Key Code (NOT VK CODE!!!!)
 	ip.ki.wVk = VK_LEFT;
-	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY; // 0 for key press
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | 0; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 3);
 
 	ip.ki.wVk = VK_LEFT;
-	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	ip.ki.wScan = 0x4B; // See: Hardware Key Code (NOT VK CODE!!!!)
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
-	Sleep(milliSeconds);
+
+	Sleep(milliSeconds * 3);
 
 	return 0;
 }
@@ -1275,19 +1393,19 @@ int Press_PageDown(int milliSeconds) {
 	ip.ki.dwExtraInfo = 0;
 
 	// Press Shift key
-	ip.ki.wScan = 0;
+	ip.ki.wScan = 0x51; // See: Hardware Key Code (NOT VK CODE!!!!)
 	ip.ki.wVk = VK_NEXT;
-	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY; // 0 for key press
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | 0; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 3);
 
 	ip.ki.wVk = VK_NEXT;
-	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	ip.ki.wScan = 0x51; // See: Hardware Key Code (NOT VK CODE!!!!)
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
-	Sleep(milliSeconds);
+
+	Sleep(milliSeconds * 3);
 
 	return 0;
 }
@@ -1302,19 +1420,19 @@ int Press_PageUp(int milliSeconds) {
 	ip.ki.dwExtraInfo = 0;
 
 	// Press Shift key
-	ip.ki.wScan = 0;
+	ip.ki.wScan = 0x49; // See: Hardware Key Code (NOT VK CODE!!!!)
 	ip.ki.wVk = VK_PRIOR;
-	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY; // 0 for key press
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | 0; // 0 for key press
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(milliSeconds);
+	Sleep(milliSeconds * 3);
 
 	ip.ki.wVk = VK_PRIOR;
-	//ip.ki.wScan = MapVirtualKey(VK_SHIFT, 0);
-	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	ip.ki.wScan = 0x49; // See: Hardware Key Code (NOT VK CODE!!!!)
+	ip.ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
-	//WaitForInputIdle(GetCurrentProcess(), milliSeconds * 30); // Too smart for RDP session :(
-	Sleep(milliSeconds);
+
+	Sleep(milliSeconds * 3);
 
 	return 0;
 }

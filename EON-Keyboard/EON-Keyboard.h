@@ -29,6 +29,8 @@ int SpecialKeyString(int TimeWait, CString strToPress);
 
 int MoveMouse(int x, int y);
 int ClickMouse(int WantedButton, int NumberOfClick);
+int WheelMouse(bool bDirection, int NumberWheel, int TimeWait);
+
 
 
 /* Letter functions */
