@@ -57,6 +57,12 @@ int Press_F11(int milliSeconds);
 int Press_F12(int milliSeconds);
 
 int Press_AltF4(int milliSeconds);
+int Press_Ctrl_a(int milliSeconds);
+int Press_Ctrl_c(int milliSeconds);
+int Press_Ctrl_v(int milliSeconds);
+int Press_Ctrl_x(int milliSeconds);
+int Press_Ctrl_F5(int milliSeconds);
+
 
 /* Direction keys */
 int Press_Down(int milliSeconds);
