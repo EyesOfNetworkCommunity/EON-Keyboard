@@ -82,7 +82,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 						//printf("Detected at:%d\n", CString(szArglist[iLoop]).Find(_T("-")));
 						if ( CString(szArglist[iLoop]).GetAt(1) == 'h') {
 							// Do -h then exit
-							Usage();
+							Usage_Full();
 						}
 						if (CString(szArglist[iLoop]).GetAt(1) == 'v') {
 							// Do -h then exit
@@ -216,7 +216,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 }
 
 int Usage(){
-	printf("EON-Keyboard version %d.%d\n", Version, Subversion);
+	printf("EON-Keyboard (French) version %d.%d\n", Version, Subversion);
 	printf("By EON Team. Maintainer: Michael Aubertin <michael.aubertin@gmail.com>\n");
 	printf("Released under GPLV2. http://www.gnu.org/licenses/old-licenses/gpl-2.0.fr.html\n");
 	printf("\n\nUsage:\n");
@@ -243,6 +243,52 @@ int Usage(){
 	printf("Please note: EON Keyboard is low level drived.\n So your keyboard must be set as French (AZERTY) to see what you expect.\n");
 	exit(1);
 }
+
+
+int Usage_Full(){
+	printf("EON-Keyboard (French) version %d.%d\n", Version, Subversion);
+	printf("By EON Team. Maintainer: Michael Aubertin <michael.aubertin@gmail.com>\n");
+	printf("Released under GPLV2. http://www.gnu.org/licenses/old-licenses/gpl-2.0.fr.html\n");
+	printf("\n\nUsage:\n");
+	printf(" -h: This help\n");
+	printf(" -v: Version\n");
+	printf(" -g: Get info about screensize and mouse x,y position.\n");
+	printf("\n");
+	printf(" -w X: Where X is the number of sec to wait before action (debug purpose only, not needed in production)\n");
+	printf(" -T X: Where X is the number of Millisec to wait when pressing and release keys\n");
+	printf(" -m xN yN: Move mouse cursor to xN yN\n");
+	printf("\n");
+	printf(" -c l: Click on Left button\n");
+	printf(" -c L: Double click on Left Button\n");
+	printf(" -c m: Click on Middle Button\n");
+	printf(" -c r: Click on Right Button\n");
+	printf(" -g: Get info about screensize and mouse x,y position.\n");
+	printf("\n");
+	printf(" -s \"Your String\": Str delimited by \"word to type.\"\n");
+	printf(" -S \"{XXX}\": Type special key or char. Can be:\n");
+	printf("\t\t- \"{TAB}\": For TAB key\n");
+	printf("\t\t- \"{ENTER}\": For ENTER key\n");
+	printf("\t\t- \"{WIN}\": For ENTER key\n");
+	printf("\t\t- \"{Fx}\": For function keys where (x) can be from 1 to 12 key\n");
+	printf("\t\t- \"{DOUBLEQUOTE}\": For \" key\n");
+	printf("\t\t- \"{ECHAP}\": For Echap key\n");
+	printf("\t\t- \"{ALTF4}\": For ALT + F4 combined key\n");
+	printf("\t\t- \"{CTRL_A}\": For CTRL + a combined key\n");
+	printf("\t\t- \"{CTRL_C}\": For CTRL + c combined key\n");
+	printf("\t\t- \"{CTRL_V}\": For CTRL + v combined key\n");
+	printf("\t\t- \"{CTRL_X}\": For CTRL + x combined key\n");
+	printf("\t\t- \"{CTRL_Fx}\": For CTRL + Fx combined where (x) can be from 1 to 12 key\n");
+	printf("\t\t- \"{DOWN}\": For DOWN key\n");
+	printf("\t\t- \"{UP}\": For UP key\n");
+	printf("\t\t- \"{LEFT}\": For LEFT key\n");
+	printf("\t\t- \"{RIGHT}\": For RIGHT key\n");
+	printf("\t\t- \"{PAGEUP}\": For PAGEUP key\n");
+	printf("\t\t- \"{PAGEDOWN}\": For PAGEDOWN key\n");
+	printf("Exemple: EON-Keyboard_32.exe -w 4 -T 5 -s \"ceci est un test du clavier virtuel.\" \n");
+	printf("Please note: EON Keyboard is low level drived.\n So your keyboard must be set as French (AZERTY) to see what you expect.\n");
+	exit(1);
+}
+
 
 int KeyString(int TimeWait, CString strToPress)
 {
@@ -513,6 +559,38 @@ int SpecialKeyString(int TimeWait, CString strToPress)
 			continue;
 		}
 
+		if (strToPress.Find(_T("{CTRL_F1}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F1}") - 1));
+			iLoop += (sizeof("{CTRL_F1}") - 1);
+			if (iDebug) printf("CTRL_F1\n");
+			Press_Ctrl_F1(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F2}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F2}") - 1));
+			iLoop += (sizeof("{CTRL_F2}") - 1);
+			if (iDebug) printf("CTRL_F2\n");
+			Press_Ctrl_F2(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F3}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F3}") - 1));
+			iLoop += (sizeof("{CTRL_F3}") - 1);
+			if (iDebug) printf("CTRL_F3\n");
+			Press_Ctrl_F3(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F4}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F4}") - 1));
+			iLoop += (sizeof("{CTRL_F4}") - 1);
+			if (iDebug) printf("CTRL_F4\n");
+			Press_Ctrl_F4(TimeWait);
+			continue;
+		}
+
 		if (strToPress.Find(_T("{CTRL_F5}"), iStringIndex) == 0) {
 			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F5}") - 1));
 			iLoop += (sizeof("{CTRL_F5}") - 1);
@@ -521,7 +599,61 @@ int SpecialKeyString(int TimeWait, CString strToPress)
 			continue;
 		}
 
+		if (strToPress.Find(_T("{CTRL_F6}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F6}") - 1));
+			iLoop += (sizeof("{CTRL_F6}") - 1);
+			if (iDebug) printf("CTRL_F6\n");
+			Press_Ctrl_F6(TimeWait);
+			continue;
+		}
 
+		if (strToPress.Find(_T("{CTRL_F7}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F7}") - 1));
+			iLoop += (sizeof("{CTRL_F7}") - 1);
+			if (iDebug) printf("CTRL_F7\n");
+			Press_Ctrl_F7(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F8}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F8}") - 1));
+			iLoop += (sizeof("{CTRL_F8}") - 1);
+			if (iDebug) printf("CTRL_F8\n");
+			Press_Ctrl_F8(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F9}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F9}") - 1));
+			iLoop += (sizeof("{CTRL_F9}") - 1);
+			if (iDebug) printf("CTRL_F9\n");
+			Press_Ctrl_F9(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F10}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F10}") - 1));
+			iLoop += (sizeof("{CTRL_F10}") - 1);
+			if (iDebug) printf("CTRL_F10\n");
+			Press_Ctrl_F10(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F11}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F11}") - 1));
+			iLoop += (sizeof("{CTRL_F11}") - 1);
+			if (iDebug) printf("CTRL_F11\n");
+			Press_Ctrl_F11(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_F12}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_F12}") - 1));
+			iLoop += (sizeof("{CTRL_F12}") - 1);
+			if (iDebug) printf("CTRL_F12\n");
+			Press_Ctrl_F12(TimeWait);
+			continue;
+		}
 
 		if (strToPress.Find(_T("{TAB}"), iStringIndex) == 0) {
 			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{TAB}") - 1));
@@ -1354,6 +1486,146 @@ int Press_Ctrl_x(int milliSeconds) {
 }
 
 
+int Press_Ctrl_F1(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F1 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F1;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F2(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F2 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F2;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F3(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F3 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F3;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F4(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F4 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F4;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
 int Press_Ctrl_F5(int milliSeconds) {
 	INPUT ip;
 	HKL HKLCurrentLayout = GetKeyboardLayout(0);
@@ -1377,6 +1649,251 @@ int Press_Ctrl_F5(int milliSeconds) {
 	Sleep(milliSeconds * 2);
 
 	ip.ki.wVk = VK_F5;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F6(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F6 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F6;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F7(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F7 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F7;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F8(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F8 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F8;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F9(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F9 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F9;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F10(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F10 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F10;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F11(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F11 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F11;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+int Press_Ctrl_F12(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VK_F12 & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_F12;
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 

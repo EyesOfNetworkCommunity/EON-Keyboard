@@ -21,9 +21,10 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-13
 using namespace std;
 
 int Version = 1;
-int Subversion = 0;
+int Subversion = 2;
 
 int Usage();
+int Usage_Full();
 int KeyString(int TimeWait, CString strToPress);
 int SpecialKeyString(int TimeWait, CString strToPress);
 
@@ -61,7 +62,18 @@ int Press_Ctrl_a(int milliSeconds);
 int Press_Ctrl_c(int milliSeconds);
 int Press_Ctrl_v(int milliSeconds);
 int Press_Ctrl_x(int milliSeconds);
+int Press_Ctrl_F1(int milliSeconds);
+int Press_Ctrl_F2(int milliSeconds);
+int Press_Ctrl_F3(int milliSeconds);
+int Press_Ctrl_F4(int milliSeconds);
 int Press_Ctrl_F5(int milliSeconds);
+int Press_Ctrl_F6(int milliSeconds);
+int Press_Ctrl_F7(int milliSeconds);
+int Press_Ctrl_F8(int milliSeconds);
+int Press_Ctrl_F9(int milliSeconds);
+int Press_Ctrl_F10(int milliSeconds);
+int Press_Ctrl_F11(int milliSeconds); 
+int Press_Ctrl_F12(int milliSeconds);
 
 
 /* Direction keys */
