@@ -273,10 +273,11 @@ int Usage_Full(){
 	printf("\t\t- \"{DOUBLEQUOTE}\": For \" key\n");
 	printf("\t\t- \"{ECHAP}\": For Echap key\n");
 	printf("\t\t- \"{ALTF4}\": For ALT + F4 combined key\n");
-	printf("\t\t- \"{CTRL_A}\": For CTRL + a combined key\n");
-	printf("\t\t- \"{CTRL_C}\": For CTRL + c combined key\n");
-	printf("\t\t- \"{CTRL_V}\": For CTRL + v combined key\n");
-	printf("\t\t- \"{CTRL_X}\": For CTRL + x combined key\n");
+	printf("\t\t- \"{CTRL_a}\": For CTRL + a combined key\n");
+	printf("\t\t- \"{CTRL_c}\": For CTRL + c combined key\n");
+	printf("\t\t- \"{CTRL_v}\": For CTRL + v combined key\n");
+	printf("\t\t- \"{CTRL_x}\": For CTRL + x combined key\n");
+	printf("\t\t- \"{CTRL_r}\": For CTRL + r combined key\n");
 	printf("\t\t- \"{CTRL_Fx}\": For CTRL + Fx combined where (x) can be from 1 to 12 key\n");
 	printf("\t\t- \"{DOWN}\": For DOWN key\n");
 	printf("\t\t- \"{UP}\": For UP key\n");
@@ -527,35 +528,43 @@ int SpecialKeyString(int TimeWait, CString strToPress)
 			continue;
 		}
 		 
-		if (strToPress.Find(_T("{CTRL_A}"), iStringIndex) == 0) {
-			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("CTRL_A}") - 1));
-			iLoop += (sizeof("{CTRL_A}") - 1);
-			if (iDebug) printf("CTRL_A\n");
+		if (strToPress.Find(_T("{CTRL_a}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("CTRL_a}") - 1));
+			iLoop += (sizeof("{CTRL_a}") - 1);
+			if (iDebug) printf("CTRL_a\n");
 			Press_Ctrl_a(TimeWait);
 			continue;
 		}
 
-		if (strToPress.Find(_T("{CTRL_C}"), iStringIndex) == 0) {
-			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_C}") - 1));
-			iLoop += (sizeof("{CTRL_C}") - 1);
-			if (iDebug) printf("CTRL_C\n");
+		if (strToPress.Find(_T("{CTRL_c}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_c}") - 1));
+			iLoop += (sizeof("{CTRL_c}") - 1);
+			if (iDebug) printf("CTRL_c\n");
 			Press_Ctrl_c(TimeWait);
 			continue;
 		}
 
-		if (strToPress.Find(_T("{CTRL_V}"), iStringIndex) == 0) {
-			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_V}") - 1));
-			iLoop += (sizeof("{CTRL_V}") - 1);
-			if (iDebug) printf("CTRL_V\n");
+		if (strToPress.Find(_T("{CTRL_v}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_v}") - 1));
+			iLoop += (sizeof("{CTRL_v}") - 1);
+			if (iDebug) printf("CTRL_v\n");
 			Press_Ctrl_v(TimeWait);
 			continue;
 		}
 
-		if (strToPress.Find(_T("{CTRL_X}"), iStringIndex) == 0) {
-			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_X}") - 1));
-			iLoop += (sizeof("{CTRL_X}") - 1);
-			if (iDebug) printf("CTRL_X\n");
+		if (strToPress.Find(_T("{CTRL_x}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_x}") - 1));
+			iLoop += (sizeof("{CTRL_x}") - 1);
+			if (iDebug) printf("CTRL_x\n");
 			Press_Ctrl_x(TimeWait);
+			continue;
+		}
+
+		if (strToPress.Find(_T("{CTRL_r}"), iStringIndex) == 0) {
+			strToPress = strToPress.Right(strToPress.GetLength() - (sizeof("{CTRL_r}") - 1));
+			iLoop += (sizeof("{CTRL_r}") - 1);
+			if (iDebug) printf("CTRL_r\n");
+			Press_Ctrl_r(TimeWait);
 			continue;
 		}
 
@@ -1472,6 +1481,43 @@ int Press_Ctrl_x(int milliSeconds) {
 	Sleep(milliSeconds * 2);
 
 	ip.ki.wVk = VkKeyScanEx((WCHAR) 'x', HKLCurrentLayout);
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VK_CONTROL; // Left ALT
+	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+	SendInput(1, &ip, sizeof(INPUT));
+	Sleep(milliSeconds * 2);
+
+	return 0;
+}
+
+
+int Press_Ctrl_r(int milliSeconds) {
+	INPUT ip;
+	HKL HKLCurrentLayout = GetKeyboardLayout(0);
+
+	// Set up a generic keyboard event.
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+
+	// Press ALT key
+	ip.ki.wScan = MapVirtualKeyEx(VK_CONTROL & 0xFF, MAPVK_VK_TO_VSC, 0);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wScan = MapVirtualKeyEx(VkKeyScanEx((WCHAR) 'r', HKLCurrentLayout) & 0xFF, MAPVK_VK_TO_VSC, HKLCurrentLayout);
+	ip.ki.dwFlags = KEYEVENTF_SCANCODE;
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(milliSeconds * 2);
+
+	ip.ki.wVk = VkKeyScanEx((WCHAR) 'r', HKLCurrentLayout);
 	ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &ip, sizeof(INPUT));
 

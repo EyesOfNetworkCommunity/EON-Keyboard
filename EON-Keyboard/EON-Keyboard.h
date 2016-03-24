@@ -62,6 +62,7 @@ int Press_Ctrl_a(int milliSeconds);
 int Press_Ctrl_c(int milliSeconds);
 int Press_Ctrl_v(int milliSeconds);
 int Press_Ctrl_x(int milliSeconds);
+int Press_Ctrl_r(int milliSeconds);
 int Press_Ctrl_F1(int milliSeconds);
 int Press_Ctrl_F2(int milliSeconds);
 int Press_Ctrl_F3(int milliSeconds);
